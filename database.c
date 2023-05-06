@@ -11,7 +11,6 @@ struct node* search_ID_node(struct node* root,int id);
 struct ques* search_keyword(char *keyword);
 
 
-
 void deep_copy_ques(struct ques* des,struct ques* sor);
 
 void insert_newques(char* problem,int ans,int correct_percent,int answered_num,int corrent_num);
@@ -50,7 +49,7 @@ void main(){
     
     insert_newques("doge",1,0.5,2,1);
     insert_newques("sun is black.",0,0.7,10,7);
-    insert_newques("professor is noob.",1,1.0,100,100);
+    insert_newques("bananacat is noob.",1,1.0,100,100);
     struct ques* test=search_ID_ques(3);
     printf("%d.%s\n",test->qid,test->q_content);
     test=search_ID_ques(1);
