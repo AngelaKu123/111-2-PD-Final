@@ -9,10 +9,11 @@
 
 
 //public funtion
-//need free() the return
+
+//回傳qid對應的ques，若找不到(超出範圍or空洞)返回NULL
 struct ques* search_ID_ques(int id);
 
-struct ques_set* search_keyword(char *keyword);
+int max_id();//回傳目前最大的qid，作為search獲取題目的取值範圍
 
 //output all question with keyword,if keyword is empty string,will output all question
 void keyword_output(char* keyword);
@@ -68,21 +69,21 @@ static struct node *root_qid=NULL;
 static struct node *head=NULL,*rear=NULL;
 
 void main(){
-    // insert_newques("problem 1",1,0.5,2,1);
-    // insert_newques("problem 2",0,0.7,10,7);
-    // insert_newques("problem 3",1,1.0,100,100);
-    // insert_newques("problem 4",1,1.0,100,100);
-    // insert_newques("problem 5",1,1.0,100,100);
-    // insert_newques("problem 6",1,1.0,100,100);
-    // insert_newques("problem 7",1,1.0,100,100);
-    // insert_newques("problem 8",1,1.0,100,100);
-    // struct ques* test=search_ID_ques(3);
-    // printf("%d.%s\n",test->qid,test->q_content);
-    //test=search_ID_ques(1);
-    // printf("%d.%s\n",test->qid,test->q_content);
-    // printf("height:%d\n",root_qid->height_qid);
-    // printf("%d.%s\n",root_qid->que.qid,root_qid->que.q_content);
-    // return;
+    insert_newques("problem 1",1,0.5,2,1);
+    insert_newques("problem 2",0,0.7,10,7);
+    insert_newques("problem 3",1,1.0,100,100);
+    insert_newques("problem 4",1,1.0,100,100);
+    insert_newques("problem 5",1,1.0,100,100);
+    insert_newques("problem 6",1,1.0,100,100);
+    insert_newques("problem 7",1,1.0,100,100);
+    insert_newques("problem 8",1,1.0,100,100);
+    struct ques* test=search_ID_ques(3);
+    printf("%d.%s\n",test->qid,test->q_content);
+    test=search_ID_ques(1);
+    printf("%d.%s\n",test->qid,test->q_content);
+    printf("height:%d\n",root_qid->height_qid);
+    printf("%d.%s\n",root_qid->que.qid,root_qid->que.q_content);
+    return;
 
     for(int i=1;i<=32;i++){
         char string[len];
@@ -152,9 +153,9 @@ struct node* insert_node_qid(struct node* root_qid,struct node* inserted_node){
 struct ques* search_ID_ques(int id){
     struct node* target_node=search_ID_node(root_qid,id);
     if(NULL==target_node)return NULL;
-    struct ques* target_que=malloc(sizeof(struct ques));
-    deep_copy_ques(target_que,&(target_node->que));
-    return target_que;
+    // struct ques* target_que=malloc(sizeof(struct ques));
+    // deep_copy_ques(target_que,&(target_node->que));
+    return &target_node->que;
 }
 
 struct node* search_ID_node(struct node* root,int id){
@@ -315,4 +316,12 @@ void inorder_trav(struct node* root){
     inorder_trav(root->lchild_qid);
     printf("%d:%s\n",root->que.qid,root->que.q_content);
     inorder_trav(root->rchild_qid);
+}
+
+int max_id(){
+    struct node* current=root_qid;
+    while(current->rchild_qid!=NULL){
+        current=current->rchild_qid;
+    }
+    return current->que.qid;
 }
