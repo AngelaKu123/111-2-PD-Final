@@ -1,3 +1,5 @@
+//this is a database for question game
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -6,25 +8,40 @@
 #define len 500
 
 
-struct ques* search_ID_ques(int id);//need free() the return
+//public funtion
+//need free() the return
+struct ques* search_ID_ques(int id);
+
+struct ques_set* search_keyword(char *keyword);
+
+//output all question with keyword,if keyword is empty string,will output all question
+void keyword_output(char* keyword);
+
+void insert_newques(char* problem,int ans,float correct_percent,int answered_num,int corrent_num);
+
+//delete the question by qid
+void delete_ques(int id);
+
+
+
+//private funtion
 struct node* search_ID_node(struct node* root,int id);
-struct ques* search_keyword(char *keyword);
-
-
 void deep_copy_ques(struct ques* des,struct ques* sor);
-
-void insert_newques(char* problem,int ans,int correct_percent,int answered_num,int corrent_num);
-
 struct node* insert_node_qid(struct node* root_qid,struct node* inserted_node);
-struct node* insert_node_correct_percent(struct node* root_correct_percent ,struct node* inserted_node);
+struct node* create_node(char* problem,int ans,float correct_percent,int answered_num,int corrent_num);
+int getheight_qid(struct node* node);
+int getBalanceFactor_qid(struct node* node);
+struct node* update_qid(struct node* node);
+struct node* rotateright_qid(struct node* node);
+struct node* rotateleft_qid(struct node* node);
+struct node* findPredecessor_qid(struct node* node);
+struct node* balance_qid(struct node* root);
+struct node* delete_node_qid(struct node* root,int qid);
+void inorder_trav(struct node* root);
 
-void delete_ques(int id);//delete the question by qid
+//structure
+struct ques{ 
 
-struct node* create_node(char* problem,int ans,int correct_percent,int answered_num,int corrent_num);
-
-struct ques{
-
-//public
     int qid; //question_id;
     char q_content[len];
     int ans;
@@ -33,35 +50,52 @@ struct ques{
     int correct_num;
 };
 
-
-
 struct node{
     struct ques que;
 
+    int height_qid; //for a leaf node,height = 1.
+
     struct node* linklist_next,*linklist_prior;
-    struct node* lchild_qid,*rchild_qid,*parent_qid;
-    struct node* lchild_correct_percent,*rchild_correct_percent,*parent_correct_percent;
+    struct node* lchild_qid,*rchild_qid;
 };
 
-static struct node *root_qid=NULL,*root_correct_percent=NULL;
+struct ques_set{ //for retrun question more than one
+    int num_ques;
+    struct ques* question_set[];
+};
+
+static struct node *root_qid=NULL;
 static struct node *head=NULL,*rear=NULL;
+
 void main(){
-    
-    insert_newques("doge",1,0.5,2,1);
-    insert_newques("sun is black.",0,0.7,10,7);
-    insert_newques("bananacat is noob.",1,1.0,100,100);
-    struct ques* test=search_ID_ques(3);
-    printf("%d.%s\n",test->qid,test->q_content);
-    test=search_ID_ques(1);
-    printf("%d.%s\n",test->qid,test->q_content);
-    return;
+    // insert_newques("problem 1",1,0.5,2,1);
+    // insert_newques("problem 2",0,0.7,10,7);
+    // insert_newques("problem 3",1,1.0,100,100);
+    // insert_newques("problem 4",1,1.0,100,100);
+    // insert_newques("problem 5",1,1.0,100,100);
+    // insert_newques("problem 6",1,1.0,100,100);
+    // insert_newques("problem 7",1,1.0,100,100);
+    // insert_newques("problem 8",1,1.0,100,100);
+    // struct ques* test=search_ID_ques(3);
+    // printf("%d.%s\n",test->qid,test->q_content);
+    //test=search_ID_ques(1);
+    // printf("%d.%s\n",test->qid,test->q_content);
+    // printf("height:%d\n",root_qid->height_qid);
+    // printf("%d.%s\n",root_qid->que.qid,root_qid->que.q_content);
+    // return;
+
+    for(int i=1;i<=32;i++){
+        char string[len];
+        sprintf(string,"problem %d",i);
+        insert_newques(string,i,1.0,5,5);
+    }
+    keyword_output("");
 }
 
-void insert_newques(char* problem,int ans,int correct_percent,int answered_num,int corrent_num){
-    if(NULL==root_qid){
-        if(NULL!=root_correct_percent){printf("error_1\n");return;}
-        root_qid=create_node(problem,ans,correct_percent,answered_num,corrent_num);
-        root_correct_percent=root_qid;
+void insert_newques(char* problem,int ans,float correct_percent,int answered_num,int corrent_num){
+    if(NULL==root_qid){ // in this case,tree_qid is empty tree.
+        struct node* newnode=create_node(problem,ans,correct_percent,answered_num,corrent_num);
+        root_qid=insert_node_qid(root_qid,newnode);
         rear=root_qid;
         head=root_qid;
         return;
@@ -71,12 +105,11 @@ void insert_newques(char* problem,int ans,int correct_percent,int answered_num,i
         rear->linklist_next=temp;
         temp->linklist_prior=rear;
         rear=temp;
-        insert_node_qid(root_qid,temp);
-        insert_node_correct_percent(root_correct_percent,temp);
+        root_qid=insert_node_qid(root_qid,temp);
     }
 }
 
-struct node* create_node(char* problem,int ans,int correct_percent,int answered_num,int corrent_num){
+struct node* create_node(char* problem,int ans,float correct_percent,int answered_num,int corrent_num){
     static int max_qid=0;
     max_qid++;
     struct node* temp_node=malloc(sizeof(struct node));
@@ -87,52 +120,33 @@ struct node* create_node(char* problem,int ans,int correct_percent,int answered_
     temp_node->que.correct_percent=correct_percent;
     temp_node->que.qid=max_qid;
 
-    temp_node->lchild_correct_percent=NULL;
+    temp_node->height_qid=1;
     temp_node->lchild_qid=NULL;
+    temp_node->rchild_qid=NULL;
     temp_node->linklist_next=NULL;
     temp_node->linklist_prior=NULL;
-    temp_node->parent_correct_percent=NULL;
-    temp_node->parent_qid=NULL;
-    temp_node->rchild_correct_percent=NULL;
-    temp_node->rchild_qid=NULL;
-
+    
+    
     return temp_node;
 }
 
 struct node* insert_node_qid(struct node* root_qid,struct node* inserted_node){
-    if(NULL==root_qid){
-        root_qid=inserted_node;
+    if(NULL == root_qid){
+        update_qid(inserted_node);
+        return inserted_node;
+    }
+    if(inserted_node->que.qid < root_qid->que.qid){
+        root_qid->lchild_qid = insert_node_qid(root_qid->lchild_qid,inserted_node);
+    }
+    else if(inserted_node->que.qid > root_qid->que.qid){
+        root_qid->rchild_qid = insert_node_qid(root_qid->rchild_qid,inserted_node);
+    }
+    else{
+        printf("already have qid:%d\n",inserted_node->que.qid);
         return root_qid;
     }
-    
-    if(inserted_node->que.qid<=root_qid->que.qid){
-        root_qid->lchild_qid=insert_node_qid(root_qid->lchild_qid,inserted_node);
-        root_qid->lchild_qid->parent_qid=root_qid;
-    }
-    else if(inserted_node->que.qid>root_qid->que.qid){
-        root_qid->rchild_qid=insert_node_qid(root_qid->rchild_qid,inserted_node);
-        root_qid->rchild_qid->parent_qid=root_qid;
-    }
 
-    return root_qid;
-}
-
-struct node* insert_node_correct_percent(struct node* root_correct_percent ,struct node* inserted_node){
-    if(NULL==root_correct_percent){
-        root_correct_percent=inserted_node;
-        return root_correct_percent;
-    }
-    
-    if(inserted_node->que.correct_percent<=root_correct_percent->que.correct_percent){
-        root_correct_percent->lchild_correct_percent=insert_node_correct_percent(root_correct_percent->lchild_correct_percent,inserted_node);
-        root_correct_percent->lchild_correct_percent->parent_correct_percent=root_correct_percent;
-    }
-    else if(inserted_node->que.correct_percent>root_correct_percent->que.correct_percent){
-        root_correct_percent->rchild_correct_percent=insert_node_correct_percent(root_correct_percent->rchild_correct_percent,inserted_node);
-        root_correct_percent->rchild_correct_percent->parent_correct_percent=root_correct_percent;
-    }
-
-    return root_correct_percent;
+    return balance_qid(root_qid);
 }
 
 struct ques* search_ID_ques(int id){
@@ -171,4 +185,134 @@ void deep_copy_ques(struct ques* des,struct ques* sor){
     des->correct_percent=sor->correct_percent;
     des->qid=sor->qid;
     strcpy(des->q_content,sor->q_content);
+}
+
+void delete_ques(int id){
+    struct node* deleted_node=search_ID_node(root_qid,id);
+
+    deleted_node->linklist_next->linklist_prior=deleted_node->linklist_prior;
+    deleted_node->linklist_prior->linklist_next=deleted_node->linklist_next;
+    delete_node_qid(root_qid,id);
+}
+
+struct node* delete_node_qid(struct node* root,int deleted_id){
+    if(NULL == root){
+        return root;
+    }
+    if(deleted_id < root->que.qid){
+        root->lchild_qid = delete_node_qid(root->lchild_qid,deleted_id);
+    }
+    else if(deleted_id > root->que.qid){
+        root->rchild_qid = delete_node_qid(root->rchild_qid,deleted_id);
+    }
+    else {
+        if(root->lchild_qid == NULL || root->rchild_qid == NULL){
+            struct node* temp = root->lchild_qid ? root->lchild_qid : root->rchild_qid;
+            if(NULL == temp){
+                temp=root;
+                root=NULL;
+            }
+            else{
+                *root=*temp;
+            }
+            free(temp);
+        }
+        else{
+            struct node* predecessor=findPredecessor_qid(root);
+            root->que=predecessor->que;
+            root->lchild_qid=delete_node_qid(root->lchild_qid,predecessor->que.qid);
+        }
+    }
+
+    if(NULL == root)return root;
+    return balance_qid(root);
+}
+
+
+struct node* update_qid(struct node* node){
+    int l_h,r_h;
+    l_h=getheight_qid(node->lchild_qid);
+    r_h=getheight_qid(node->rchild_qid);
+    node->height_qid= l_h>r_h ? (l_h+1):(r_h+1);
+}
+
+struct node* balance_qid(struct node* root){
+    update_qid(root);
+    int balanceFactor = getBalanceFactor_qid(root);
+    if(balanceFactor > 1){
+        if(getBalanceFactor_qid(root->lchild_qid) < 0){
+            root->lchild_qid = rotateleft_qid(root->lchild_qid);
+        }
+        return rotateright_qid(root);
+    }
+    if(balanceFactor < -1){
+        if(getBalanceFactor_qid(root->rchild_qid) > 0){
+            root->rchild_qid=rotateright_qid(root->rchild_qid);
+        }
+        return rotateleft_qid(root);
+    }
+    return root;
+}
+
+int getheight_qid(struct node* node){
+    if(NULL == node){
+        return 0;
+    }
+    else return node->height_qid;
+}
+
+int getBalanceFactor_qid(struct node* node){
+    if(NULL == node)return 0;
+    else return getheight_qid(node->lchild_qid)-getheight_qid(node->rchild_qid);
+
+}
+
+struct node* rotateright_qid(struct node* node){
+    struct node* newroot=node->lchild_qid;
+    node->lchild_qid = newroot->rchild_qid;
+    newroot->rchild_qid=node;
+    update_qid(node);
+    update_qid(newroot);
+    return newroot;
+}
+
+struct node* rotateleft_qid(struct node* node){
+    struct node* newroot=node->rchild_qid;
+    node->rchild_qid=newroot->lchild_qid;
+    newroot->lchild_qid=node;
+    update_qid(node);
+    update_qid(newroot);
+    return newroot;
+}
+
+struct node* findPredecessor_qid(struct node* node){
+    struct node* current=node->lchild_qid;
+    while(NULL != current->rchild_qid){
+        current=current->rchild_qid;
+    }
+    return current;
+}
+
+void exchange_node_value(struct node* n1,struct node* n2){
+    struct ques temp=n1->que;
+    n1->que=n2->que;
+    n2->que=temp;
+}
+
+void keyword_output(char* keyword){
+    struct node* current=head;
+    while(NULL != current){
+        if(NULL != strstr(current->que.q_content,keyword)){
+            printf("%d:%s\n",current->que.qid,current->que.q_content);
+        }
+        current=current->linklist_next;
+    }
+
+}
+
+void inorder_trav(struct node* root){
+    if(NULL==root)return;
+    inorder_trav(root->lchild_qid);
+    printf("%d:%s\n",root->que.qid,root->que.q_content);
+    inorder_trav(root->rchild_qid);
 }
