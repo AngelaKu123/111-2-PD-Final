@@ -97,7 +97,6 @@ int main(){
             if(user_S_ans != ptr->que.ans){
                 printf("What a pity! You got it wrong!\n");
                 keep_answer_right = 0;
-                //³sÄò = 0
             } else {
                 printf("Amazing! You got the question right!\n");
                 keep_answer_right++;
