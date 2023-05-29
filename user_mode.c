@@ -68,7 +68,7 @@ int main(){
         ptr = ptr->linklist_next;
         ptr->linklist_prior = temp;
         ptr->linklist_next = NULL;
-        printf("debug!1\n");
+        //printf("debug!1\n");
     }
 
     int *id_choose = malloc(10 * sizeof(int));;
@@ -81,10 +81,11 @@ int main(){
     //if choose the deleted question?
     Bubble_sort(id_choose, 10);
 
+    printf("Hello! Welcome to user mode! Hope you guys have some fun!\n");
     int ccc = 0, user_S_ans = 0, score = 0, keep_answer_right = 0;
     for(ptr = first; ptr != NULL && ccc < 10; ptr = ptr->linklist_next){
         if(ptr->que.qid == id_choose[ccc]){
-            printf("Question id: %d\n", ptr->que.qid);
+            printf("\nQuestion id: %d\n", ptr->que.qid);
             printf("Question: %s\n",ptr->que.q_content);
             //printf("%d", ptr->que.ans);
             printf("How many people answered the question: %d\n", ptr->que.answered_num);
@@ -109,7 +110,16 @@ int main(){
             ccc++;
         }
     }
-    printf("Congratulations! You got %d points!\n", score);
+    printf("\nCongratulations! You got %d points!\n", score);
+
+    //free memories and close files
+    free(id_choose);
+    ptr = first;
+    while(ptr != NULL){
+        struct node* temp = ptr;
+        ptr = ptr->linklist_next;
+        free(ptr);
+    }
     fclose(fptr);
     return 0;
 }
