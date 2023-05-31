@@ -55,36 +55,34 @@ int main(){
     first->linklist_prior = NULL;
     //scan info from files
     struct node* ptr = first;
-    while(fscanf(fptr, "%d ", &ptr->que.qid) != EOF){
+    while (fscanf(fptr, "%d ", &ptr->que.qid) != EOF) {
         fgets(ptr->que.q_content, 500, fptr);
         ptr->que.q_content[strlen(ptr->que.q_content) - 1] = '\0';//clear \n char
         fscanf(fptr, "%d ", &ptr->que.ans);
         fscanf(fptr, "%f ", &ptr->que.correct_percent);
         fscanf(fptr, "%d ", &ptr->que.answered_num);
         fscanf(fptr, "%d ", &ptr->que.correct_num);
+
         struct node* temp = ptr;
         struct node* new_node = malloc(sizeof(struct node));
         ptr->linklist_next = new_node;
         ptr = ptr->linklist_next;
         ptr->linklist_prior = temp;
         ptr->linklist_next = NULL;
-        //printf("debug!1\n");
     }
 
-    int *id_choose = malloc(10 * sizeof(int));;
-    id_choose = qid_rand_choose();
-    if(id_choose == NULL){
+    int *id_choose = qid_rand_choose();
+    if (id_choose == NULL) {
         return 0;//End this game!
     }
 
-    //int id_choose[10] = {1, 2, 3, 4, 5, 6, 7, 9, 11, 12};
     //if choose the deleted question?
     Bubble_sort(id_choose, 10);
 
     printf("Hello! Welcome to user mode! Hope you guys have some fun!\n");
     int ccc = 0, user_S_ans = 0, score = 0, keep_answer_right = 0;
-    for(ptr = first; ptr != NULL && ccc < 10; ptr = ptr->linklist_next){
-        if(ptr->que.qid == id_choose[ccc]){
+    for (ptr = first; ptr != NULL && ccc < 10; ptr = ptr->linklist_next) {
+        if (ptr->que.qid == id_choose[ccc]) {
             printf("\nQuestion id: %d\n", ptr->que.qid);
             printf("Question: %s\n",ptr->que.q_content);
             //printf("%d", ptr->que.ans);
@@ -94,16 +92,20 @@ int main(){
 
             printf("Now type your answer: ");
             scanf("%d", &user_S_ans);
-            if(user_S_ans != ptr->que.ans){
+            if (user_S_ans != ptr->que.ans) {
                 printf("What a pity! You got it wrong!\n");
                 keep_answer_right = 0;
+                ptr->que.correct_percent = ((ptr->que.correct_num * 100) / ((ptr->que.answered_num) + 1));
             } else {
                 printf("Amazing! You got the question right!\n");
                 keep_answer_right++;
-                if(keep_answer_right >= 2)
+                if (keep_answer_right >= 2)
                     printf("Wow! You answered %d questions in a row!\n", keep_answer_right);
                 score += 10;
                 ptr->que.correct_num++;
+
+                ptr->que.correct_percent = ((ptr->que.correct_num * 100) / ((ptr->que.answered_num) + 1));
+                printf("debug: %.2f\n", ptr->que.correct_percent);
             }
             ptr->que.answered_num++;
             ccc++;
@@ -111,19 +113,43 @@ int main(){
     }
     printf("\nCongratulations! You got %d points!\n", score);
 
+
+    fclose(fptr);
+
+    //renew some info
+    FILE *fptr_out;
+    fptr_out = fopen("test.txt", "w");
+    if (fptr_out == NULL) {
+        printf("Failed to open file for writing.\n");
+        return 0;
+    }
+
+    for (ptr = first; ptr != NULL && ptr->que.qid != 0; ptr = ptr->linklist_next) { //there some bug that will fprintf id = 0
+        fprintf(fptr_out, "%d\n", ptr->que.qid);
+        fputs(ptr->que.q_content, fptr_out);
+        fprintf(fptr_out, "\n%d\n", ptr->que.ans);
+
+        // 寫入更改後的 answered_num 和 correct_num
+        fprintf(fptr_out, "%.2f\n", ptr->que.correct_percent);
+        fprintf(fptr_out, "%d\n", ptr->que.answered_num);
+        fprintf(fptr_out, "%d\n", ptr->que.correct_num);
+    }
+
     //free memories and close files
     free(id_choose);
     ptr = first;
-    while(ptr != NULL){
+    while (ptr != NULL) {
         struct node* temp = ptr;
         ptr = ptr->linklist_next;
         free(ptr);
     }
-    fclose(fptr);
+
+    fclose(fptr_out);
+
     return 0;
 }
 
-char* qid_rand_choose(void){    //return the pointer point to array which record the q_id been choosen
+char* qid_rand_choose(void) {    //return the pointer point to array which record the q_id been choosen
     srand( time(NULL) );
     int* record = malloc(10 * sizeof(int));//int record[10] = {0,0};
     int i , j;
@@ -147,13 +173,13 @@ char* qid_rand_choose(void){    //return the pointer point to array which record
     return record;
 }
 
-void Bubble_sort(int arr[], int num){
+void Bubble_sort(int arr[], int num) {
     int temp;
     int flag = 0;
-    for(int i = 1; (i < num) && (flag != 1); i++){ //i:the total run times
+    for (int i = 1; (i < num) && (flag != 1); i++) { //i:the total run times
         flag = 1;
-        for(int j = 0; j < num - i; j++){       //after exchanging, the last one must be the biggest
-            if(arr[j] > arr[j+1]){  //num - i:the neighbors exchange times need
+        for (int j = 0; j < num - i; j++) {       //after exchanging, the last one must be the biggest
+            if (arr[j] > arr[j+1]) {  //num - i:the neighbors exchange times need
                 temp = arr[j];
                 arr[j] = arr[j+1];
                 arr[j+1] = temp;
