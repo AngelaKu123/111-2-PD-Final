@@ -1,0 +1,120 @@
+1
+how are you?
+3
+55.00
+18
+10
+2
+how are you?
+3
+63.00
+22
+14
+3
+how are you?
+3
+52.00
+17
+9
+4
+how are you?
+3
+66.00
+24
+16
+5
+how are you?
+3
+65.00
+23
+15
+6
+how are you?
+3
+47.00
+19
+9
+7
+how are you?
+3
+50.00
+18
+9
+8
+how are you?
+3
+55.00
+20
+11
+9
+how are you?
+3
+52.00
+19
+10
+10
+how are you?
+3
+60.00
+20
+12
+11
+how are you?
+3
+52.00
+17
+9
+12
+how are you?
+3
+55.00
+20
+11
+13
+how are you?
+3
+50.00
+22
+11
+14
+how are you?
+3
+45.00
+22
+10
+15
+how are you?
+3
+55.00
+18
+10
+16
+how are you?
+3
+56.00
+23
+13
+17
+how are you?
+3
+42.00
+19
+8
+18
+how are you?
+3
+40.00
+20
+8
+19
+how are you?
+3
+52.00
+19
+10
+20
+how are you?
+3
+38.00
+13
+5
