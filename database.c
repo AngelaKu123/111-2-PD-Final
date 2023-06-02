@@ -3,10 +3,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
+#include<time.h>
 
 #define len 500
 
+#define getid -2100483647
 
 //public funtion
 
@@ -18,10 +19,15 @@ int max_id();//回傳目前最大的qid，作為search獲取題目的取值範�
 //output all question with keyword,if keyword is empty string,will output all question
 void keyword_output(char* keyword);
 
+//output all question with correct_percent,from high to low
+void cp_output();
+
 void insert_newques(char* problem,int ans,float correct_percent,int answered_num,int corrent_num);
 
 //delete the question by qid
 void delete_ques(int id);
+
+
 
 
 
@@ -38,7 +44,17 @@ struct node* rotateleft_qid(struct node* node);
 struct node* findPredecessor_qid(struct node* node);
 struct node* balance_qid(struct node* root);
 struct node* delete_node_qid(struct node* root,int qid);
-void inorder_trav(struct node* root);
+
+void keyword_pri(char* keyword,struct node* root);
+
+//return the num of questions,should equal or less than max_id()
+int num_ques(struct node* root);
+
+int id_factor(int value);
+
+int compfunc(const void* a, const void* b);
+
+void insert_in_arr(struct node** arr,struct node* root);
 
 //structure
 struct ques{ 
@@ -56,7 +72,6 @@ struct node{
 
     int height_qid; //for a leaf node,height = 1.
 
-    struct node* linklist_next,*linklist_prior;
     struct node* lchild_qid,*rchild_qid;
 };
 
@@ -65,67 +80,60 @@ struct ques_set{ //for retrun question more than one
     struct ques* question_set[];
 };
 
+struct link_node{
+    int value;
+    struct link_node *next;
+};
+
 static struct node *root_qid=NULL;
-static struct node *head=NULL,*rear=NULL;
 
 void main(){
-    insert_newques("problem 1",1,0.5,2,1);
-    insert_newques("problem 2",0,0.7,10,7);
-    insert_newques("problem 3",1,1.0,100,100);
-    insert_newques("problem 4",1,1.0,100,100);
-    insert_newques("problem 5",1,1.0,100,100);
-    insert_newques("problem 6",1,1.0,100,100);
-    insert_newques("problem 7",1,1.0,100,100);
-    insert_newques("problem 8",1,1.0,100,100);
-    struct ques* test=search_ID_ques(3);
-    printf("%d.%s\n",test->qid,test->q_content);
-    test=search_ID_ques(1);
-    printf("%d.%s\n",test->qid,test->q_content);
-    printf("height:%d\n",root_qid->height_qid);
-    printf("%d.%s\n",root_qid->que.qid,root_qid->que.q_content);
-    return;
 
-    for(int i=1;i<=32;i++){
-        char string[len];
+    char string[100];
+
+    for(int i=1;i<8;i++){
         sprintf(string,"problem %d",i);
-        insert_newques(string,i,1.0,5,5);
+        insert_newques(string,1,1.0/i,i,1);
     }
-    keyword_output("");
+
+    for(int i=4;i<=4;i++){
+        printf("we will delete problem %d:\n",i);
+        delete_ques(i);
+        keyword_output("");
+        printf("we have %d question now.\n",num_ques(root_qid));
+    }
+
+    cp_output();
+
+
+
 }
 
 void insert_newques(char* problem,int ans,float correct_percent,int answered_num,int corrent_num){
     if(NULL==root_qid){ // in this case,tree_qid is empty tree.
         struct node* newnode=create_node(problem,ans,correct_percent,answered_num,corrent_num);
         root_qid=insert_node_qid(root_qid,newnode);
-        rear=root_qid;
-        head=root_qid;
         return;
     }
     else{
         struct node* temp=create_node(problem,ans,correct_percent,answered_num,corrent_num);
-        rear->linklist_next=temp;
-        temp->linklist_prior=rear;
-        rear=temp;
         root_qid=insert_node_qid(root_qid,temp);
     }
 }
 
 struct node* create_node(char* problem,int ans,float correct_percent,int answered_num,int corrent_num){
-    static int max_qid=0;
-    max_qid++;
+    int newID=id_factor(getid);
     struct node* temp_node=malloc(sizeof(struct node));
     strcpy(temp_node->que.q_content,problem);
     temp_node->que.ans=ans;
     temp_node->que.answered_num=answered_num;
     temp_node->que.correct_num=corrent_num;
     temp_node->que.correct_percent=correct_percent;
-    temp_node->que.qid=max_qid;
+    temp_node->que.qid=newID;
 
     temp_node->height_qid=1;
     temp_node->lchild_qid=NULL;
     temp_node->rchild_qid=NULL;
-    temp_node->linklist_next=NULL;
-    temp_node->linklist_prior=NULL;
     
     
     return temp_node;
@@ -143,7 +151,7 @@ struct node* insert_node_qid(struct node* root_qid,struct node* inserted_node){
         root_qid->rchild_qid = insert_node_qid(root_qid->rchild_qid,inserted_node);
     }
     else{
-        printf("already have qid:%d\n",inserted_node->que.qid);
+        printf("error:already have qid:%d\n",inserted_node->que.qid);
         return root_qid;
     }
 
@@ -190,10 +198,12 @@ void deep_copy_ques(struct ques* des,struct ques* sor){
 
 void delete_ques(int id){
     struct node* deleted_node=search_ID_node(root_qid,id);
-
-    deleted_node->linklist_next->linklist_prior=deleted_node->linklist_prior;
-    deleted_node->linklist_prior->linklist_next=deleted_node->linklist_next;
-    delete_node_qid(root_qid,id);
+    if(NULL == deleted_node){
+        printf("error: the id is not exist,can't delete.\n");
+        return;
+    }
+    root_qid = delete_node_qid(root_qid,id);
+    id_factor(id);
 }
 
 struct node* delete_node_qid(struct node* root,int deleted_id){
@@ -214,7 +224,8 @@ struct node* delete_node_qid(struct node* root,int deleted_id){
                 root=NULL;
             }
             else{
-                *root=*temp;
+                //*root=*temp;
+                memcpy(root,temp,sizeof(struct node));
             }
             free(temp);
         }
@@ -225,7 +236,7 @@ struct node* delete_node_qid(struct node* root,int deleted_id){
         }
     }
 
-    if(NULL == root)return root;
+    if(NULL == root)return NULL;
     return balance_qid(root);
 }
 
@@ -275,6 +286,7 @@ struct node* rotateright_qid(struct node* node){
     update_qid(node);
     update_qid(newroot);
     return newroot;
+
 }
 
 struct node* rotateleft_qid(struct node* node){
@@ -283,6 +295,7 @@ struct node* rotateleft_qid(struct node* node){
     newroot->lchild_qid=node;
     update_qid(node);
     update_qid(newroot);
+
     return newroot;
 }
 
@@ -301,21 +314,7 @@ void exchange_node_value(struct node* n1,struct node* n2){
 }
 
 void keyword_output(char* keyword){
-    struct node* current=head;
-    while(NULL != current){
-        if(NULL != strstr(current->que.q_content,keyword)){
-            printf("%d:%s\n",current->que.qid,current->que.q_content);
-        }
-        current=current->linklist_next;
-    }
-
-}
-
-void inorder_trav(struct node* root){
-    if(NULL==root)return;
-    inorder_trav(root->lchild_qid);
-    printf("%d:%s\n",root->que.qid,root->que.q_content);
-    inorder_trav(root->rchild_qid);
+    keyword_pri(keyword,root_qid);
 }
 
 int max_id(){
@@ -324,4 +323,91 @@ int max_id(){
         current=current->rchild_qid;
     }
     return current->que.qid;
+}
+
+int num_ques(struct node* root){
+    if(NULL == root) return 0;
+    return 1+num_ques(root->lchild_qid)+num_ques(root->rchild_qid);
+}
+
+void keyword_pri(char* keyword,struct node* root){
+    if(NULL == root)return;
+    keyword_pri(keyword,root->lchild_qid);
+    if(NULL != strstr(root->que.q_content,keyword)){
+        printf("%d.%s\n",root->que.qid,root->que.q_content);
+    }
+    
+    keyword_pri(keyword,root->rchild_qid);
+}
+
+int id_factor(int value){
+    static int max_id=0;
+    static struct link_node* head=NULL;
+
+    if(value>0){//input the idle ID
+        struct link_node* newnode=malloc(sizeof(struct link_node));
+        if(NULL == newnode){
+            printf("error: function %s is memory allocation failed.\n",__func__);
+            return -1;
+        }
+        newnode->value=value;
+        newnode->next=head;
+        head=newnode;
+    }
+
+    else if(value == getid){//allocate id 
+        if(head != NULL){ //stack have idle id
+            struct link_node* popnode=head;
+            head=head->next;
+            int popvalue=popnode->value;
+            free(popnode);
+            return popvalue;
+        }
+        else{ //stack is empty
+            if(max_id == INT_MAX){
+                printf("error:question_id is overflow.\n");
+                return -1;
+            }
+            max_id++;
+            return max_id;
+        }
+    }
+    else{
+        printf("error:in function %s have invalid input.\n",__func__);
+        return -1;
+    }
+}
+
+int compfunc(const void* a, const void* b){
+    const struct node* n1 = (const struct node*)a;
+    const struct node* n2 = (const struct node*)b;
+    if(n1->que.correct_percent <= n2->que.correct_percent) return -1 ;
+    else return 1;
+}
+
+void cp_output(){
+    int question_num=num_ques(root_qid);
+    struct node* arr[question_num];
+    insert_in_arr(arr,root_qid);
+    for(int i=0;i<question_num;i++){
+        for( int j=0;j<question_num-i-1;j++){
+            if(arr[j]->que.correct_percent > arr[j+1]->que.correct_percent){
+                struct node* temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
+            }
+        }
+    }
+    for(int i=0;i<question_num;i++){
+        printf("correct rate:%.2f,content:%s\n",arr[i]->que.correct_percent*100,arr[i]->que.q_content);
+    }
+}
+
+void insert_in_arr(struct node** arr,struct node* root){
+    if(NULL == root)return;
+    static int counter=0;
+    arr[counter]=root;
+    counter++;
+    insert_in_arr(arr,root->lchild_qid);
+    insert_in_arr(arr,root->rchild_qid);
 }
