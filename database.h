@@ -6,6 +6,7 @@
 // Public functions
 struct ques* search_ID_ques(int id);
 int max_id();
+void cp_output();
 void keyword_output(char* keyword);
 void insert_newques(char* problem, int ans, float correct_percent, int answered_num, int corrent_num);
 void delete_ques(int id);
