@@ -10,6 +10,7 @@ void cp_output();
 void keyword_output(char* keyword);
 void insert_newques(char* problem, int ans, float correct_percent, int answered_num, int corrent_num);
 void delete_ques(int id);
+int num_question();
 
 // Structures
 struct ques {

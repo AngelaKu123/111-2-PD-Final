@@ -27,7 +27,8 @@ void insert_newques(char* problem,int ans,float correct_percent,int answered_num
 //delete the question by qid
 void delete_ques(int id);
 
-
+//return the number of questions;
+int num_question();
 
 
 
@@ -100,7 +101,7 @@ void main(){
         printf("we will delete problem %d:\n",i);
         delete_ques(i);
         keyword_output("");
-        printf("we have %d question now.\n",num_ques(root_qid));
+        printf("we have %d question now.\n",num_question());
     }
 
     cp_output();
@@ -410,4 +411,8 @@ void insert_in_arr(struct node** arr,struct node* root){
     counter++;
     insert_in_arr(arr,root->lchild_qid);
     insert_in_arr(arr,root->rchild_qid);
+}
+
+int num_question(){
+    return num_ques(root_qid);
 }
