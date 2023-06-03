@@ -129,7 +129,7 @@ int main(){
         fputs(ptr->que.q_content, fptr_out);
         fprintf(fptr_out, "\n%d\n", ptr->que.ans);
 
-        // �g�J���᪺ answered_num �M correct_num
+        // ¼g¤J§ó§ï«áªº answered_num ©M correct_num
         fprintf(fptr_out, "%.2f\n", ptr->que.correct_percent);
         fprintf(fptr_out, "%d\n", ptr->que.answered_num);
         fprintf(fptr_out, "%d\n", ptr->que.correct_num);
