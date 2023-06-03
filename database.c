@@ -6,6 +6,7 @@
 #include<time.h>
 #include"database.h"
 #define len 500
+#define INT_MAX 2147483647
 
 #define getid -2100483647
 

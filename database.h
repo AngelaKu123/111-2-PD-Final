@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #define len 500
+#define INT_MAX 2147483647
 
 // Public functions
 struct ques* search_ID_ques(int id);
