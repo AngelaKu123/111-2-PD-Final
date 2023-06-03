@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<time.h>
-
+#include"database.h"
 #define len 500
 
 #define getid -2100483647
@@ -57,29 +57,9 @@ int compfunc(const void* a, const void* b);
 
 void insert_in_arr(struct node** arr,struct node* root);
 
-//structure
-struct ques{ 
 
-    int qid; //question_id;
-    char q_content[len];
-    int ans;
-    float correct_percent;
-    int answered_num;
-    int correct_num;
-};
 
-struct node{
-    struct ques que;
 
-    int height_qid; //for a leaf node,height = 1.
-
-    struct node* lchild_qid,*rchild_qid;
-};
-
-struct ques_set{ //for retrun question more than one
-    int num_ques;
-    struct ques* question_set[];
-};
 
 struct link_node{
     int value;
@@ -87,28 +67,6 @@ struct link_node{
 };
 
 static struct node *root_qid=NULL;
-
-void main(){
-
-    char string[100];
-
-    for(int i=1;i<8;i++){
-        sprintf(string,"problem %d",i);
-        insert_newques(string,1,1.0/i,i,1);
-    }
-
-    for(int i=4;i<=4;i++){
-        printf("we will delete problem %d:\n",i);
-        delete_ques(i);
-        keyword_output("");
-        printf("we have %d question now.\n",num_question());
-    }
-
-    cp_output();
-
-
-
-}
 
 void insert_newques(char* problem,int ans,float correct_percent,int answered_num,int corrent_num){
     if(NULL==root_qid){ // in this case,tree_qid is empty tree.
