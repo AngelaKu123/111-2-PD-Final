@@ -5,12 +5,12 @@ how are you doge1?
 1
 how are you doge2?
 3
-0.25
+1.00
 4
 1
 how are you doge3?
 3
-0.20
+1.00
 5
 1
 how are you doge4?
@@ -20,7 +20,7 @@ how are you doge4?
 1
 how are you doge5?
 3
-0.33
+1.00
 3
 1
 how are you  doge6?
@@ -30,7 +30,7 @@ how are you  doge6?
 1
 how are you doge7?
 3
-0.25
+1.00
 4
 1
 how are you doge8?
@@ -40,22 +40,22 @@ how are you doge8?
 1
 how are you doge9?
 3
-0.20
+1.00
 5
 1
 how are you doge10?
 3
-0.20
+1.00
 5
 1
 how are you doge11?
 3
-0.33
+1.00
 3
 1
 how are you doge12?
 3
-0.25
+1.00
 4
 1
 how are you doge13?
@@ -80,8 +80,8 @@ how are you doge16?
 1
 how are you doge17?
 3
-0.17
-6
+1.00
+1
 1
 how are you doge18?
 3
@@ -90,7 +90,7 @@ how are you doge18?
 1
 how are you doge19?
 3
-0.25
+1.00
 4
 1
 how are you doge20?
@@ -98,3 +98,22 @@ how are you doge20?
 1.00
 5
 1
+
+problem 1
+sfhiehionvenrigejij
+1
+0.00
+0
+0
+
+sun is black.yes or no?
+0
+0.00
+0
+0
+
+problem 3
+3
+0.00
+0
+0
