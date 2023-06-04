@@ -1,16 +1,15 @@
-/*  管理者模式相關函數
-    判斷使用者輸入是否正確(抓輸入資料，跟資料庫資料比較)
-    計算某題目不同次被回答的答對率
-    讓管理者增減題目的函數>>database裡面有了
+/*  管理者模式的函數
+    1. 新增題目
+    2. 查詢現有題目
+    3. 編輯題目或刪除
 
-    設計排行榜
-    分數計算
+    其他函數
+    1. 判斷使用者輸入是否正確
+    2. 計算某題目不同次被回答的答對率(每次回答後簡易重新計算)
 
-manager 要修改的部分
-2. 依照題目的正確率、回答次數等作排行榜
-3. 要檢查debug
-4. 如果時間足夠，要新增身分系統(玩家帳號、密碼、是否為管理員、玩家資料)
-
+    有空再做
+    1. 依照題目的正確率、回答次數等作排行榜
+    2. 如果時間足夠，要新增身分系統(玩家帳號、密碼、是否為管理員、玩家資料)
 */
 
 #include <stdio.h>
@@ -36,8 +35,8 @@ manager 要修改的部分
 
 
 
-void interactive_place(void);
-void search_question_interactive(void);
+void manager_mode(void);
+static void search_question_interactive(void);
 static void display_question_infomation(struct ques* ques_to_display);
 static void edit_question_infomation(void);
 int check_answer(int ques_id, int player_answer);
@@ -45,7 +44,7 @@ void modify_question_correctness_percent(int operation, int id);
 
 
 
-void interactive_place(void){
+void manager_mode(void){
     printf("Welcome to manager mode!\n");
 
     // identification
@@ -65,17 +64,18 @@ void interactive_place(void){
     while(1){
         printf("\n================================\n\n");
         int opr=0;
-        while(opr<1 || 3<opr){
+        while(opr<1 || 4<opr){
             printf("Choose one operation below:\n"
                 "1. Add a new question\n"
-                "2. Display, Edit, or Delete a certain question's information\n"// use id or keyword to search
-                "3. Exit\n"
+                "2. Display a certain question's information\n"// use id or keyword to search
+                "3. Edit or Delete a certain question's information\n"
+                "4. Exit\n"
                 "Enter: ");
             scanf("%d", &opr);
         }
         printf("\n================================\n\n");
-        if(opr==3){
-            break;
+        if(opr==4){
+            return;
         }
         else if(opr==1){
             // "1. Add a new question\n"
@@ -102,16 +102,9 @@ void interactive_place(void){
 
             //search and display
             search_question_interactive();
-            /*
-            struct ques *search_result=NULL;
-            search_result=search_question_interactive();
-
-            // display the search results move into search interactive
-            display_question_infomation(search_result);
-            */
-            printf("\n================================\n\n");
-            
-            // ask edit or delete or leave
+        }
+        else if(opr==3){
+            // "3. Edit or Delete a certain question's information\n"
             edit_question_infomation();
         }
     }
@@ -121,7 +114,7 @@ void interactive_place(void){
 
 
 // use the function in database to search id or keyword
-void search_question_interactive(void){
+static void search_question_interactive(void){
     //search
     int search_way=0;
     struct ques *question_search_result=NULL;
@@ -178,7 +171,7 @@ static void display_question_infomation(struct ques* ques_to_display){
         printf("This question has been totally answered %d times, ", ques_to_display->answered_num);
         printf("%d of all was correct, ", ques_to_display->correct_num);
         printf("and the correct rate was %f\n", ques_to_display->correct_percent);
-        printf("---------------------------------\n\n");
+        printf("---------------------------------\n");
     }
     return;
 }
@@ -187,28 +180,20 @@ static void display_question_infomation(struct ques* ques_to_display){
 
 static void edit_question_infomation(void){
     while(1){
-        // edit or not
-        char tmp_ch='a';
-        while(tmp_ch != 'Y' && tmp_ch != 'N'){
-            printf("Do you want to edit a certain question's infomation?(Y/N)");
-            scanf("%c", &tmp_ch);
-        }
-        if(tmp_ch == 'N') break;
-
-        printf("\n================================\n\n");
-
         // locate question
-        int ques_id=0;
+        int ques_id=-1;
         struct ques *question_to_edit=NULL;
-        printf("Which question do you want to modify?\n"
+        printf("Which question do you want to modify? (enter -1 to back)\n"
             "qusestion id: ");
         scanf("%d", &ques_id);
+        if(ques_id==-1) return;
         question_to_edit=search_ID_ques(ques_id);
 
         printf("\n=========================================\n");
         printf("The original question information:\n\n");
         display_question_infomation(question_to_edit);
         printf("\n=========================================\n\n");
+        if(question_to_edit == NULL)  return;
 
         // modify
         int edit_choice=0;
@@ -253,10 +238,11 @@ static void edit_question_infomation(void){
             char tmp='a';
             while(tmp != 'Y' && tmp != 'N'){
                 printf("Are you sure to DELETE this question(Y/N): ");
-                scanf("%c", &tmp);
+                scanf(" %c", &tmp);
             }
             if(tmp=='Y'){
                 delete_ques(question_to_edit->qid);// function in database
+                question_to_edit=NULL;
             }
         }
         printf("\n\n=========================================\n");
