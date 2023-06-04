@@ -64,18 +64,19 @@ void manager_mode(void){
     while(1){
         printf("\n================================\n\n");
         int opr=0;
-        while(opr<1 || 5<opr){
+        while(opr<1 || 6<opr){
             printf("Choose one operation below:\n"
                 "1. Add a new question\n"
                 "2. Display a certain question's information\n"// use id or keyword to search
                 "3. Display all questions\n"
-                "4. Edit or Delete a certain question's information\n"
-                "5. Exit\n"
+                "4. Display all questions in descending order\n"
+                "5. Edit or Delete a certain question's information\n"
+                "6. Exit\n"
                 "Enter: ");
             scanf("%d", &opr);
         }
         printf("\n================================\n\n");
-        if(opr==5){
+        if(opr==6){
             return;
         }
         else if(opr==1){
@@ -105,10 +106,15 @@ void manager_mode(void){
             search_question_interactive();
         }
         else if(opr==3){
+            // "3. Display all questions\n"
             keyword_output("");
         }
         else if(opr==4){
-            // "3. Edit or Delete a certain question's information\n"
+            // "4. Display all questions in descending order\n"
+            cp_output();
+        }
+        else if(opr==5){
+            // "5. Edit or Delete a certain question's information\n"
             edit_question_infomation();
         }
     }
