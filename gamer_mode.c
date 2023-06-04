@@ -3,24 +3,14 @@
 #include<string.h>
 #include<time.h>
 #include "database.h"
+#include "gamer_mode.h"
 
 int* qid_rand_choose(void);
+void gamer_mode(void);
 
-void main(){
+void gamer_mode(void){
     //intization
     char string[100];
-
-    for(int i=1;i < 20;i++){
-        sprintf(string,"problem %d",i);
-        insert_newques(string,1,1.0/i,i,1);
-    }
-
-    for(int i=4;i<=4;i++){
-        printf("we will delete problem %d:\n",i);
-        delete_ques(i);
-        keyword_output("");
-        printf("we have %d question now.\n",num_question());
-    }
 
     //cp_output();
 
@@ -31,7 +21,7 @@ void main(){
         //End this game!
     }
 
-     printf("Hello! Welcome to user mode! Hope you guys have some fun!\n");
+    printf("\nHello! Welcome to user mode! Hope you guys have some fun!\n");
     int ccc = 0, user_S_ans = 0, score = 0, keep_answer_right = 0;
     for (int *ptr = id_choose; ptr != NULL && ccc < 10; ptr++) {
         struct ques *temp_ques = search_ID_ques(*ptr);
@@ -47,7 +37,7 @@ void main(){
         if (user_S_ans != temp_ques->ans) {
             printf("What a pity! You got it wrong!\n");
             keep_answer_right = 0;
-            temp_ques->correct_percent = ((temp_ques->correct_num * 100) / ((temp_ques->answered_num) + 1));//remember to multiply 100
+            temp_ques->correct_percent = ((temp_ques->correct_num * 1.0 ) / ((temp_ques->answered_num) + 1));//remember to multiply 100
         } else {
             printf("Amazing! You got the question right!\n");
             keep_answer_right++;
@@ -56,7 +46,7 @@ void main(){
             score += 10;
             temp_ques->correct_num++;
 
-            temp_ques->correct_percent = ((temp_ques->correct_num * 100) / ((temp_ques->answered_num) + 1));
+            temp_ques->correct_percent = ((temp_ques->correct_num * 1.0) / ((temp_ques->answered_num) + 1));
             printf("debug: %.2f\n", temp_ques->correct_percent);
         }
         temp_ques->answered_num++;
@@ -64,8 +54,7 @@ void main(){
     }
     printf("\nCongratulations! You got %d points!\n", score);
 
-
-    //gcc .\jsf_test.c .\database.c -o jsf_test
+    //gcc .\jsf_test_gamer_mode.c .\database.c -o jsf_test_gamer_mode
     //C:\Users\g5368\Desktop\Csie_exercises_projects\ProgramDesignSem2\final_project_test\111-2-PD-Final-main
 }
 

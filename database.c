@@ -13,20 +13,20 @@
 //public funtion
 
 //回傳qid對應的ques，若找不到(超出範圍or空洞)返回NULL
-struct ques* search_ID_ques(int id); //basic_search
+struct ques* search_ID_ques(int id);
 
 int max_id();//回傳目前最大的qid，作為search獲取題目的取值範圍
 
 //output all question with keyword,if keyword is empty string,will output all question
-void keyword_output(char* keyword); //basic_traverse
+void keyword_output(char* keyword);
 
 //output all question with correct_percent,from high to low
-void cp_output(); //basic_sort
+void cp_output();
 
-void insert_newques(char* problem,int ans,float correct_percent,int answered_num,int corrent_num);//basic_add
+void insert_newques(char* problem,int ans,float correct_percent,int answered_num,int corrent_num);
 
 //delete the question by qid
-void delete_ques(int id); //basic_delete
+void delete_ques(int id);
 
 //return the number of questions;
 int num_question();
@@ -34,11 +34,11 @@ int num_question();
 
 
 //private funtion
-struct node* search_ID_node(struct node* root,int id); 
+struct node* search_ID_node(struct node* root,int id);
 void deep_copy_ques(struct ques* des,struct ques* sor);
-struct node* insert_node_qid(struct node* root_qid,struct node* inserted_node); 
-struct node* create_node(char* problem,int ans,float correct_percent,int answered_num,int corrent_num); 
-int getheight_qid(struct node* node); 
+struct node* insert_node_qid(struct node* root_qid,struct node* inserted_node);
+struct node* create_node(char* problem,int ans,float correct_percent,int answered_num,int corrent_num);
+int getheight_qid(struct node* node);
 int getBalanceFactor_qid(struct node* node);
 struct node* update_qid(struct node* node);
 struct node* rotateright_qid(struct node* node);
@@ -52,7 +52,7 @@ void keyword_pri(char* keyword,struct node* root);
 //return the num of questions,should equal or less than max_id()
 int num_ques(struct node* root);
 
-int id_factor(int value);//advanced_datastructure_stack_madeByLinklist
+int id_factor(int value);
 
 int compfunc(const void* a, const void* b);
 
