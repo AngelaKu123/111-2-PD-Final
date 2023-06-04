@@ -4,6 +4,8 @@
 #include<time.h>
 #include "database.h"
 #include "gamer_mode.h"
+#include "manager_mode.h"
+
 
 void main(){
 
@@ -28,8 +30,28 @@ void main(){
         insert_newques( temp_q_content, temp_ans, temp_correct_num, temp_answered_num, temp_correct_num);
     }
 
-    //while(){}gamer_mode or manager node loop
-    gamer_mode();
+    int exit=0;
+    while(!exit){
+        int ins;
+        printf("choose mode: 1:gamer_mode, 2:manager_mode, 3:exit:\ninput:");
+        scanf("%d",&ins);
+        switch (ins)
+        {
+        case 1:
+            gamer_mode();
+            break;
+        case 2:
+            manager_mode();
+            break;
+        case 3:
+            exit=1;
+            break;
+        
+        default:
+            continue;
+            break;
+        }
+    }
 
     fclose(fptr);
     //output 
