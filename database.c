@@ -52,7 +52,7 @@ void keyword_pri(char* keyword,struct node* root);
 //return the num of questions,should equal or less than max_id()
 int num_ques(struct node* root);
 
-int id_factor(int value);
+int id_factor(int value);//advanced_datastructure_stack_madeByLinklist
 
 int compfunc(const void* a, const void* b);
 
