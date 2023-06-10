@@ -27,7 +27,7 @@ void gamer_mode(void){
         struct ques *temp_ques = search_ID_ques(*ptr);
         printf("\nQuestion id: %d\n", temp_ques->qid);
         printf("Question: %s\n",temp_ques->q_content);
-        printf("Answer: %d\n", temp_ques->ans);
+        //printf("Answer: %d\n", temp_ques->ans);
         printf("How many people answered the question: %d\n", temp_ques->answered_num);
         printf("Correct percent: %.2f\n", temp_ques->correct_percent);
         printf("How many people got it right: %d\n", temp_ques->correct_num);
@@ -54,8 +54,6 @@ void gamer_mode(void){
     }
     printf("\nCongratulations! You got %d points!\n", score);
 
-    //gcc .\jsf_test_gamer_mode.c .\database.c -o jsf_test_gamer_mode
-    //C:\Users\g5368\Desktop\Csie_exercises_projects\ProgramDesignSem2\final_project_test\111-2-PD-Final-main
 }
 
 int* qid_rand_choose(void) {    //return the pointer point to array which record the q_id been choosen
