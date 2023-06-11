@@ -28,8 +28,6 @@ struct node {
 
     int height_qid;          // Height of the node in the qid tree
 
-    struct node* linklist_next;  // Next node in the linked list
-    struct node* linklist_prior; // Previous node in the linked list
     struct node* lchild_qid;     // Left child node in the qid tree
     struct node* rchild_qid;     // Right child node in the qid tree
 };
