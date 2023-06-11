@@ -1,119 +1,100 @@
-how are you doge1?
+What is Chung Cheng University's another name? 1.Pineaplle University 2.Peach University 3.Apple University
+1
+1.00
+5
+1
+What food can't be eaten by cat? 1.papaya 2.grape 3.chicken breast
+2
+1.00
+4
+1
+What is the skin color of a polar bear? 1.white 2.gray 3.black
 3
 1.00
 5
 1
-how are you doge2?
+What is the creature that kills the most humans? 1.mosquito 2.bat 3.rat
 3
 1.00
 4
 1
-how are you doge3?
+What is the largest organ in the human body? 1.skin 2.lungs 3.liver
+1
+1.00
 3
+1
+How many teeth does an adult human have? 1.28 2.32 3.36
+2
+1.00
+3
+1
+How do you round a number down to the nearest integer in C? 1.Num = floor(num); 2.Num = round(num); 3.Num = ceil(num);
+1
+1.00
+4
+1
+How do you generate a random number in C? 1.Num = rand(); 2.Num = random(); 3.Num = generateRandom();
+1
+1.00
+3
+1
+How do you determine whether a number is odd or even in C? 1.if (num && 2) 2.if (num % 2 == 0) 3.if (num / 2 != 0)
+2
 1.00
 5
 1
-how are you doge4?
+What is the largest planet in the solar system? 1.Mars 2.Jupiter 3.Pluto
+2
+1.00
+5
+1
+Which animation is related to mecha? 1.EVA 2.Assassination Classroom 3.Spy family
+1
+1.00
+3
+1
+Which operator is used for comparing two values in C? 1.= 2.<> 3.==
 3
 1.00
 4
 1
-how are you doge5?
-3
-1.00
-3
-1
-how are you  doge6?
-3
-1.00
-3
-1
-how are you doge7?
-3
-1.00
-4
-1
-how are you doge8?
-3
-1.00
-3
-1
-how are you doge9?
-3
+What is the purpose of the "sizeof" operator in C? 1.To allocate memory for a variable. 2.To determine the size of a variable or data type in bytes. 3.To convert a variable to a different data type.
+2
 1.00
 5
 1
-how are you doge10?
-3
-1.00
-5
+How do you access the elements of an array in C? 1.By using the array name followed by the index in square brackets. 2.By using the dot operator. 3.By using the arrow operator.
 1
-how are you doge11?
-3
-1.00
-3
-1
-how are you doge12?
-3
-1.00
-4
-1
-how are you doge13?
-3
-1.00
-5
-1
-how are you  doge14?
-3
 1.00
 2
 1
-how are you  doge15?
+Which film is known for its iconic line "Here's Johnny!"? 1.Psycho 2.A Clockwork Orange 3.The Shining
 3
 1.00
 4
 1
-how are you doge16?
+Which film is directed by Ang Lee? 1.Kung Fu Hustle 2.Crouching Tiger, Hidden Dragon 3.Memoirs of a Geisha
+2
+1.00
+3
+1
+Who is the acclaimed Japanese filmmaker known for movies like "Spirited Away" and "My Neighbor Totoro"? 1.Hayao Miyazaki 2.Akira Kurosawa 3.Takeshi Kitano
+1
+1.00
+1
+1
+The new system of civil law at the age of 18 is officially implemented in 2023, what can NOT 18 years old guys do? 1.apply for a mobile phone number 2.set up an account 3.be a city council candidate
 3
 1.00
 3
 1
-how are you doge17?
-3
-1.00
-1
-1
-how are you doge18?
-3
-1.00
-3
-1
-how are you doge19?
-3
+Whose carer is Vtuber? 1.PewDiePie 2.Usada Pekora 3.HIKAKIN
+2
 1.00
 4
 1
-how are you doge20?
+Which of the following groups is not from South Korea? 1.Le sserfim 2.Nmixx 3.Linkin Park
 3
 1.00
 5
 1
-
-problem 1
-sfhiehionvenrigejij
-1
-0.00
-0
-0
-
-sun is black.yes or no?
-0
-0.00
-0
-0
-
-problem 3
-3
-0.00
-0
-0
