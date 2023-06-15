@@ -179,17 +179,17 @@ struct node* delete_node_qid(struct node* root,int deleted_id){
     else {
         if(root->lchild_qid == NULL || root->rchild_qid == NULL){
             struct node* temp = root->lchild_qid ? root->lchild_qid : root->rchild_qid;
-            if(NULL == temp){
+            if(NULL == temp){ // deleted node have no child
                 temp=root;
                 root=NULL;
             }
-            else{
+            else{ // deleted node have one child
                 //*root=*temp;
                 memcpy(root,temp,sizeof(struct node));
             }
             free(temp);
         }
-        else{
+        else{ // deleted node have two child
             struct node* predecessor=findPredecessor_qid(root);
             root->que=predecessor->que;
             root->lchild_qid=delete_node_qid(root->lchild_qid,predecessor->que.qid);
@@ -210,16 +210,16 @@ struct node* update_qid(struct node* node){
 
 struct node* balance_qid(struct node* root){
     update_qid(root);
-    int balanceFactor = getBalanceFactor_qid(root);
-    if(balanceFactor > 1){
-        if(getBalanceFactor_qid(root->lchild_qid) < 0){
-            root->lchild_qid = rotateleft_qid(root->lchild_qid);
+    int balanceFactor = getBalanceFactor_qid(root); //height of left-height of right
+    if(balanceFactor > 1){ //LL or LR
+        if(getBalanceFactor_qid(root->lchild_qid) < 0){ //LR
+            root->lchild_qid = rotateleft_qid(root->lchild_qid); //make it become LL
         }
         return rotateright_qid(root);
     }
-    if(balanceFactor < -1){
-        if(getBalanceFactor_qid(root->rchild_qid) > 0){
-            root->rchild_qid=rotateright_qid(root->rchild_qid);
+    if(balanceFactor < -1){ //RR or RL
+        if(getBalanceFactor_qid(root->rchild_qid) > 0){// RL
+            root->rchild_qid=rotateright_qid(root->rchild_qid); //make it become RR
         }
         return rotateleft_qid(root);
     }
